@@ -1,9 +1,8 @@
-<!doctype html>
 <?php
     // Start the session
     session_start();
 ?>
-
+<!doctype html>
 <html lang="en">
   <head>
     <title>My Milk Tea Online</title>

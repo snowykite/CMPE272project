@@ -47,15 +47,8 @@
       <div class="navbar navbar-dark bg-dark">
         <div class="container d-flex justify-content-between">
           <a href="index.php" class="navbar-brand">Home</a>
-          <a href="#" class="navbar-brand">News</a>
-          <?php
-            // Checks to see if the user is already logged in. If so, refirect to correct page.
-            if (isset($_SESSION['loggedIn']) && $_SESSION['loggedIn'] == true) {
-                echo "<a href=\"users.php\" class=\"navbar-brand\">Users</a>";
-            } else {
-                echo "<a href=\"login.php\" class=\"navbar-brand\">Users</a>";
-            }
-          ?>
+          <a href="news.php" class="navbar-brand">News</a>
+          <a href="#" class="navbar-brand">Users</a>
           <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarHeader" aria-controls="navbarHeader" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
           </button>
@@ -78,7 +71,6 @@
           </form>
         </div>
       </section>
-
     </main>
 
     <footer class="text-muted">
