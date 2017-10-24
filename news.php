@@ -1,10 +1,15 @@
 <!doctype html>
+<?php
+    // Start the session
+    session_start();
+?>
 <html lang="en">
   <head>
     <title>My Milk Tea Online</title>
     <!-- Required meta tags -->
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link href="shared.css" rel="stylesheet">
     <link href="main.css" rel="stylesheet">
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css" integrity="sha384-PsH8R72JQ3SOdhVi3uxftmaW6Vc51MKb0q5P2rRUpPvrszuE4W1povHYgTpBfshb" crossorigin="anonymous">
@@ -39,6 +44,14 @@
         <div class="container d-flex justify-content-between">
           <a href="index.php" class="navbar-brand">Home</a>
           <a href="#" class="navbar-brand">News</a>
+          <?php
+            // Checks to see if the user is already logged in. If so, refirect to correct page.
+            if (isset($_SESSION['loggedIn']) && $_SESSION['loggedIn'] == true) {
+                echo "<a href=\"users.php\" class=\"navbar-brand\">Users</a>";
+            } else {
+                echo "<a href=\"login.php\" class=\"navbar-brand\">Login</a>";
+            }
+          ?>
           <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarHeader" aria-controls="navbarHeader" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
           </button>
@@ -53,8 +66,6 @@
           <h1 class="jumbotron-heading">Coming Up:</h1>
           <p class="lead text-muted">New Trending Holloween drinks!</p>
           <p>
-            <!--<a href="#" class="btn btn-primary">Main call to action</a>-->
-            <!--<a href="#" class="btn btn-secondary">Secondary action</a>-->
           </p>
         </div>
       </section>
