@@ -35,9 +35,9 @@ body {
   border: 0;
 }
 
-.card > img {
+.card > a > img {
   margin-bottom: .75rem;
-  max-height: 30rem;
+  width: 100%;
 }
 
 .card-text {

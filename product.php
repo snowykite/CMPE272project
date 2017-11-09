@@ -8,10 +8,28 @@
         PDO::MYSQL_ATTR_INIT_COMMAND => 'SET NAMES utf8',
         ); 
     $db = new PDO($dsn, $username, $password, $options);
-    $query = "SELECT * FROM products";
+    $query = "SELECT * FROM products WHERE id = {$_GET['id']}";
     $stmt = $db->query($query);
     $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
-    // $line = $result[0];
+    $line = $result[0];
+    
+    $lastViewedIds = $_COOKIE['lastViewedIds'];
+    $ids = explode(",", $lastViewedIds);
+    $uids = [];
+    foreach ($ids as $id) {
+        if (count($uids) >= 5) break;
+        if (!in_array($id, $uids)) {
+            array_push($uids, $id);
+        }
+    }
+    $uid_str = implode(",", $uids);
+    setcookie('lastViewedIds', $uid_str ? "{$_GET['id']}," . $uid_str : "{$_GET['id']}");
+    $query = "SELECT * FROM products WHERE id IN ({$uid_str}) ORDER BY FIELD (id, {$uid_str})";
+    $stmt = $db->query($query);
+    $lastViewed = [];
+    if ($stmt) {
+        $lastViewed = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
 ?>
 <!doctype html>
 <html lang="en">
@@ -53,7 +71,7 @@
       </div>
       <div class="navbar navbar-dark bg-dark">
         <div class="container d-flex justify-content-between">
-          <a href="#" class="navbar-brand">Home</a>
+          <a href="index.php" class="navbar-brand">Home</a>
           <a href="news.php" class="navbar-brand">News</a>
           <?php
             // Checks to see if the user is already logged in. If so, refirect to correct page.
@@ -74,26 +92,22 @@
 
       <section class="jumbotron text-center">
         <div class="container">
-          <h1 class="jumbotron-heading"> Mix, drink, share and enjoy!</h1>
-          <p class="lead text-muted">Share your recipes, how-to videos, fun moments of all kinds of milk tea drinks. Milk tea is much better with friends!</p>
-          <p>
-            <!--<a href="#" class="btn btn-primary">Main call to action</a>-->
-            <!--<a href="#" class="btn btn-secondary">Secondary action</a>-->
-          </p>
+          <h1 class="jumbotron-heading"><?php echo $line['title'] ?></h1>
+          <img src=<?php echo "'" . $line['imageUrl'] . "'"?> style="max-height:500px;">
+          <p class="lead text-muted"><?php echo $line['description']?></p>
         </div>
       </section>
 
       <div class="album text-muted">
         <div class="container">
-
+          <h2 class="jumbotron-heading">Recently Viewed:</h2>
           <div class="row">
             <?php
-                foreach ($result as $line) {
+                foreach ($lastViewed as $line) {
                     echo "<div class=\"card\"><a href=\"product.php?id={$line['id']}\"><img src=\"{$line['imageUrl']}\" alt=\"Card image cap\"></a><p class=\"card-text\">{$line['title']}</p></div>";
                 }
             ?>
           </div>
-
         </div>
       </div>
 
@@ -116,22 +130,3 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/js/bootstrap.min.js" integrity="sha384-alpBpkh1PFOepccYVYDB4do5UnbKysX5WZXm3XxPqe5iKTfUKjNkCk9SaVuEZflJ" crossorigin="anonymous"></script>
     </body>
 </html>
-
-
-<?php
-/**
- * Front to the WordPress application. This file doesn't do anything, but loads
- * wp-blog-header.php which does and tells WordPress to load the theme.
- *
- * @package WordPress
- */
-
-/**
- * Tells WordPress to load the WordPress theme and output it.
- *
- * @var bool
- */
-// define('WP_USE_THEMES', true);
-
-/** Loads the WordPress Environment and Template */
-// require( dirname( __FILE__ ) . '/wp-blog-header.php' ); ?>

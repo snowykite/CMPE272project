@@ -49,7 +49,7 @@
             if (isset($_SESSION['loggedIn']) && $_SESSION['loggedIn'] == true) {
                 echo "<a href=\"users.php\" class=\"navbar-brand\">Users</a>";
             } else {
-                echo "<a href=\"login.php\" class=\"navbar-brand\">Login</a>";
+                echo "<a href=\"login.php\" class=\"navbar-brand\">Secure</a>";
             }
           ?>
           <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarHeader" aria-controls="navbarHeader" aria-expanded="false" aria-label="Toggle navigation">

@@ -3,7 +3,7 @@
     session_start();
     // Checks to see if the user is already logged in. If so, refirect to home page.
     if (isset($_SESSION['loggedIn']) && $_SESSION['loggedIn'] == true) {
-        header("Location: index.php");
+        header("Location: users.php");
     }
     // fake username and password
     $username = "admin";
@@ -13,7 +13,7 @@
     if (isset($_POST['username']) && isset($_POST['password'])) {
         if ($_POST['username'] == $username && $_POST['password'] == $password) {
             $_SESSION['loggedIn'] = true;
-            header('Location: index.php');
+            header('Location: users.php');
         } else {
             $_SESSION['loggedIn'] = false;
             $error = "Invalid username and password!";
