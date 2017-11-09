@@ -27,7 +27,7 @@ body {
   background-color: #f7f7f7;
 }
 
-.card {
+.card-mid {
   float: left;
   width: 33.333%;
   padding: .75rem;
@@ -35,11 +35,28 @@ body {
   border: 0;
 }
 
-.card > a > img {
+.card-sm {
+  float: left;
+  width: 20%;
+  padding: .75rem;
+  margin-bottom: 2rem;
+  border: 0;
+}
+
+.card-mid > a > img {
+  margin-bottom: .75rem;
+  width: 100%;
+}
+
+.card-sm > a > img {
   margin-bottom: .75rem;
   width: 100%;
 }
 
 .card-text {
+  font-size: 85%;
+}
+
+.card-sm-text {
   font-size: 85%;
 }

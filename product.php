@@ -12,6 +12,9 @@
     $stmt = $db->query($query);
     $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
     $line = $result[0];
+    $newCount = $line['view_count'] + 1;
+    $query = "UPDATE products SET view_count = {$newCount} WHERE id = {$_GET['id']}";
+    $stmt = $db->query($query);
     
     $lastViewedIds = $_COOKIE['lastViewedIds'];
     $ids = explode(",", $lastViewedIds);
@@ -104,7 +107,7 @@
           <div class="row">
             <?php
                 foreach ($lastViewed as $line) {
-                    echo "<div class=\"card\"><a href=\"product.php?id={$line['id']}\"><img src=\"{$line['imageUrl']}\" alt=\"Card image cap\"></a><p class=\"card-text\">{$line['title']}</p></div>";
+                    echo "<div class=\"card card-mid\"><a href=\"product.php?id={$line['id']}\"><img src=\"{$line['imageUrl']}\" alt=\"Card image cap\"></a><p class=\"card-text\">{$line['title']}</p></div>";
                 }
             ?>
           </div>

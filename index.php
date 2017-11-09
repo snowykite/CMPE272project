@@ -11,7 +11,10 @@
     $query = "SELECT * FROM products";
     $stmt = $db->query($query);
     $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
-    // $line = $result[0];
+
+    $query = "SELECT * FROM products ORDER BY view_count DESC LIMIT 5";
+    $stmt = $db->query($query);
+    $mostViewed = $stmt->fetchAll(PDO::FETCH_ASSOC);
 ?>
 <!doctype html>
 <html lang="en">
@@ -85,15 +88,24 @@
 
       <div class="album text-muted">
         <div class="container">
-
+          <h2 class="jumbotron-heading">Most Viewed Posts:</h2>
           <div class="row">
             <?php
-                foreach ($result as $line) {
-                    echo "<div class=\"card\"><a href=\"product.php?id={$line['id']}\"><img src=\"{$line['imageUrl']}\" alt=\"Card image cap\"></a><p class=\"card-text\">{$line['title']}</p></div>";
+                foreach ($mostViewed as $line) {
+                    echo "<div class=\"card card-sm\"><a href=\"product.php?id={$line['id']}\"><img src=\"{$line['imageUrl']}\" alt=\"Card image cap\"></a><p class=\"card-text-sm\">{$line['title']}</p></div>";
                 }
             ?>
           </div>
-
+        </div>
+        <div class="container">
+          <h2 class="jumbotron-heading">All Posts:</h2>
+          <div class="row">
+            <?php
+                foreach ($result as $line) {
+                    echo "<div class=\"card card-mid\"><a href=\"product.php?id={$line['id']}\"><img src=\"{$line['imageUrl']}\" alt=\"Card image cap\"></a><p class=\"card-text\">{$line['title']}</p></div>";
+                }
+            ?>
+          </div>
         </div>
       </div>
 
