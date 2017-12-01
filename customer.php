@@ -1,6 +1,4 @@
 <?php
-    // Start the session
-    session_start();
     $dsn = 'mysql:host=localhost;dbname=mymilkte_products';
     $username = 'mymilkte_admin';
     $password = 'admin';
@@ -8,30 +6,30 @@
         PDO::MYSQL_ATTR_INIT_COMMAND => 'SET NAMES utf8',
         ); 
     $db = new PDO($dsn, $username, $password, $options);
-    $query = "SELECT * FROM products WHERE id = {$_GET['id']}";
-    $stmt = $db->query($query);
-    $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
-    $line = $result[0];
-    $newCount = $line['view_count'] + 1;
-    $query = "UPDATE products SET view_count = {$newCount} WHERE id = {$_GET['id']}";
-    $stmt = $db->query($query);
+    $BASE_QUERY = "SELECT * FROM users WHERE 1"; // base query
+    $query = $BASE_QUERY;
     
-    $lastViewedIds = $_COOKIE['lastViewedIds'];
-    $ids = explode(",", $lastViewedIds);
-    $uids = [];
-    foreach ($ids as $id) {
-        if (count($uids) >= 5) break;
-        if (!in_array($id, $uids)) {
-            array_push($uids, $id);
-        }
+    if (!empty($_POST['fname'])) {
+        $query = $query . " AND first_name = '{$_POST['fname']}'";
     }
-    $uid_str = implode(",", $uids);
-    setcookie('lastViewedIds', $uid_str ? "{$_GET['id']}," . $uid_str : "{$_GET['id']}");
-    $query = "SELECT * FROM products WHERE id IN ({$uid_str}) ORDER BY FIELD (id, {$uid_str})";
-    $stmt = $db->query($query);
-    $lastViewed = [];
-    if ($stmt) {
-        $lastViewed = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    
+    if (!empty($_POST['lname'])) {
+        $query = $query . " AND last_name = '{$_POST['lname']}'";
+    }
+    
+    if (!empty($_POST['email'])) {
+        $query = $query . " AND email = '{$_POST['email']}'";
+    }
+    
+    if (!empty($_POST['phone'])) {
+        $query = $query . " AND (home_phone = '{$_POST['phone']}' OR cell_phone = '{$_POST['phone']}')";
+    }
+    
+    if ($query !== $BASE_QUERY) { // search if form is submit
+        $stmt = $db->query($query);
+        if ($stmt) {
+            $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        }
     }
 ?>
 <!doctype html>
@@ -42,7 +40,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <link href="shared.css" rel="stylesheet">
-    <link href="main.css" rel="stylesheet">
+    <link href="login.css" rel="stylesheet">
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css" integrity="sha384-PsH8R72JQ3SOdhVi3uxftmaW6Vc51MKb0q5P2rRUpPvrszuE4W1povHYgTpBfshb" crossorigin="anonymous">
   </head>
@@ -79,7 +77,7 @@
           <li class="dropdown">
               <a href="#" class="dropdown-toggle navbar-brand" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Users <span class="caret"></span></a>
               <ul class="dropdown-menu bg-dark">
-                  <li><a class="navbar-brand" href="customer.php">Search Users</a></li>
+                  <li><a class="navbar-brand" href="#">Search Users</a></li>
                   <li><a class="navbar-brand" href="newuser.php">Create User</a></li>
               </ul>
           </li>
@@ -99,28 +97,31 @@
     </header>
 
     <main role="main">
+      <div class="container">
 
-      <section class="jumbotron text-center">
-        <div class="container">
-          <h1 class="jumbotron-heading"><?php echo $line['title'] ?></h1>
-          <img src=<?php echo "'" . $line['imageUrl'] . "'"?> style="max-height:500px;">
-          <p class="lead text-muted"><?php echo $line['description']?></p>
-        </div>
-      </section>
-
-      <div class="album text-muted">
-        <div class="container">
-          <h2 class="jumbotron-heading">Recently Viewed:</h2>
-          <div class="row">
-            <?php
-                foreach ($lastViewed as $line) {
-                    echo "<div class=\"card card-mid\"><a href=\"product.php?id={$line['id']}\"><img src=\"{$line['imageUrl']}\" alt=\"Card image cap\"></a><p class=\"card-text\">{$line['title']}</p></div>";
-                }
-            ?>
-          </div>
-        </div>
+        <form class="form-signin" method="POST" action="customer.php">
+            <h2 class="form-signin-heading">Search User:</h2>
+          <label for="inputFirstName" class="sr-only">First Name</label>
+          <input type="text" id="inputFirstName" name="fname" class="form-control" placeholder="First Name" autofocus>
+          <label for="inputLastName" class="sr-only">Last Name</label>
+          <input type="text" id="inputLastName" name="lname" class="form-control" placeholder="Last Name">
+          <label for="inputEmail" class="sr-only">Email</label>
+          <input type="text" id="inputEmail" name="email" class="form-control" placeholder="Email Address">
+          <label for="inputPhone" class="sr-only">Phone #</label>
+          <input type="text" id="inputPhone" name="phone" class="form-control" placeholder="Phone # (123-456-7890)">
+          <button class="btn btn-lg btn-primary btn-block" type="submit">Search!</button>
+        </form>
+        
       </div>
-
+      <div class="container search-result">
+        <ul class="list-unstyled">
+          <?php
+            foreach ($result as $line) {
+                echo "<li>Name: {$line['first_name']} {$line['last_name']}<ol><li>Email: {$line['email']}</li><li>Address: {$line['address']}</li><li>Cell #: {$line['cell_phone']}</li></ol></li>";
+            }
+          ?>
+        </ul>
+      </div>
     </main>
 
     <footer class="text-muted">

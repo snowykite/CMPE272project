@@ -62,12 +62,19 @@
         <div class="container d-flex justify-content-between">
           <a href="index.php" class="navbar-brand">Home</a>
           <a href="news.php" class="navbar-brand">News</a>
+          <li class="dropdown">
+              <a href="#" class="dropdown-toggle navbar-brand" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Users <span class="caret"></span></a>
+              <ul class="dropdown-menu bg-dark">
+                  <li><a class="navbar-brand" href="customer.php">Search Users</a></li>
+                  <li><a class="navbar-brand" href="newuser.php">Create User</a></li>
+              </ul>
+          </li>
           <?php
             // Checks to see if the user is already logged in. If so, refirect to correct page.
             if (isset($_SESSION['loggedIn']) && $_SESSION['loggedIn'] == true) {
-                echo "<a href=\"users.php\" class=\"navbar-brand\">Users</a>";
+                echo "<a href=\"users.php\" class=\"navbar-brand\">Secure</a>";
             } else {
-                echo "<a href=\"#\" class=\"navbar-brand\">Login</a>";
+                echo "<a href=\"#\" class=\"navbar-brand\">Secure</a>";
             }
           ?>
           <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarHeader" aria-controls="navbarHeader" aria-expanded="false" aria-label="Toggle navigation">
