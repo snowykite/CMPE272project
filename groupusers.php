@@ -115,6 +115,34 @@
             curl_close($ch);
           ?>
       </div>
+      <div class="container">
+          <h2 class="section-header">Wenqi's users:</h2>
+          <?php
+            $options = array(
+                CURLOPT_URL => "http://worldwith.us/local-user-list/",
+                CURLOPT_RETURNTRANSFER => 1
+                );
+            $ch = curl_init();
+            curl_setopt_array($ch, $options);
+            $res = curl_exec($ch);
+            echo $res;
+            curl_close($ch);
+          ?>
+      </div>
+      <div class="container">
+          <h2 class="section-header">Na's users:</h2>
+          <?php
+            $options = array(
+                CURLOPT_URL => "http://swiftbooks.net/bookstore/api/myusers.php",
+                CURLOPT_RETURNTRANSFER => 1
+                );
+            $ch = curl_init();
+            curl_setopt_array($ch, $options);
+            $res = curl_exec($ch);
+            echo $res;
+            curl_close($ch);
+          ?>
+      </div>
     </main>
 
     <footer class="text-muted">
